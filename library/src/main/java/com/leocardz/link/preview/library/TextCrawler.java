@@ -33,6 +33,10 @@ public class TextCrawler {
     public TextCrawler() {
     }
 
+    public DocumentGetter buildDocumentGetter (String url) {
+        return new JsoupDocumentGetter(url);
+    }
+
     public void makePreview(LinkPreviewCallback callback, String url) {
         ImagePickingStrategy imagePickingStrategy = new DefaultImagePickingStrategy();
 
@@ -123,7 +127,8 @@ public class TextCrawler {
                     wasPreviewGenerationSuccessful = true;
                 } else {
                     try {
-                        Document doc = getDocument();
+                        DocumentGetter getter = buildDocumentGetter(sourceContent.getFinalUrl());
+                        Document doc = getter.getDocument();
 
                         sourceContent.setHtmlCode(extendedTrim(doc.toString()));
 
